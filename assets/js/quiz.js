@@ -6,9 +6,7 @@ const counter = document.getElementById("counter");
 const choiceA = document.getElementById("A");
 const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
-const progress = document.getElementById("progress");
 const scoreContainer = document.getElementById("score-container");
-
 
 //questions arr[] to access questions via index
 var questions = [
@@ -115,7 +113,37 @@ function scoreRender(){
     var scoreContainer = document.getElementById("score-container");
     //add score conatiner to inner html to change when score changes
     scoreContainer.style.display ="block";
-    var finalScore = count;
-    scoreContainer.innerHTML = ("Final score " + count);
+    //use finascore l8r to add to locastorage
+    var finalScore = count+1; //bc >= will stop at 0 and record score as -1 
+    scoreContainer.innerHTML = ("Final score: " + finalScore);
+    saveScore(finalScore);
 };
 
+
+//using same variable name for convinience but finalscore is NOT global fyi
+function saveScore(finalScore){
+    //need to wipe questions from the visible dom
+    question.innerHTML = "";
+    choiceA.innerHTML = "";
+    choiceB.innerHTML = "";
+    choiceC.innerHTML = "";
+    var finalPage = document.getElementById("score-page");
+    finalPage.style.display = "block";
+    finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>");
+    //finalPage.inner
+    //TO DO still gotta wipe the count off the page too
+    var userName = prompt("Enter a username to save your high score!");
+    //localStorage.setItem(userName, JSON.stringify(userName));
+    //localStorage.setItem(finalScore, JSON.stringify(finalScore));
+    //make an array thatll have to be parsed (bc only strings are stored in locastorage)
+    var score={
+        score: finalScore,
+        name: userName
+    }
+};
+
+
+//TO DO:
+//- still gotta wipe the count off the page too
+// - end quiz at last question...still loops when done:/
+//display high scores on a page at the end
