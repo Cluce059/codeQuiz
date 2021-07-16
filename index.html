@@ -4,9 +4,44 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel ="stylesheet" href="assets/css/style.css">
     <title>Carol's Code Quiz!</title>
 </head>
 <body>
+<!--button to start quiz-->
+<div id ="start">
+    <button class = "start-button">
+        Start Quiz!
+    </button>    
+</div>
+<div id="quiz" style ="display: none"><!--maybe transllate this into css idk yet-->
+    <div id="question">
+        <!--questions loaded into dom here from quiz.js-->
+    </div>
+    <!--choices-->
+    <div id="choices">
+        <div class= "choice" id="A">A</div> <!--onclick="checkAnswer('A')" not sure if i can use this method-->
+        <div class="choice" id="B">B</div>
+        <div class="choice" id="C">C</div>
+    </div>
+    <!--timer-->
+    <div id="timer">
+        <div id="counter">  <!--6 seconds for example--> </div>
+    </div>
+    <!--Progress section-->
+    <div id="progress">
+        <div class="progress"></div>
+    </div>
+    </div> <!--this is the quiz div mind u-->
+    <!--score-->
+    <div id="score-container" style ="display:none">
+        <!--INSERT SMILEY FACE OR SOM SHIT HERE-->
+        <p>50%</p> <!--dummy text for example-->
+    </div>
     
+
+
+<script src="assets/js/quiz.js"></script>
+
 </body>
 </html>
