@@ -77,23 +77,29 @@ var score = 0;
 function answerHandler (event){
     event.preventDefault();
     //if user picks corrrect choice
+    var targetChoice = event.target.id;
     
     //if correct, update score and move onto next question
+    if(targetChoice === questions[questionIndex].correct){
+        console.log(targetChoice);
+    }
+    else{
+        console.log("wronge");
+    }
     //check if there are more questions before proceeding
     if(questionIndex < lastQuestionIndex){
         questionIndex ++;
         questionRender();
     }
-    //if last question
+    //if was the last question bring up the score
     else{
-        clearInterval(TIMER);
         scoreRender();
     }
 };
 
 //event listener for start button, calling startquiz when clicked
 start.addEventListener("click", startQuiz); 
-var TIMER;
+
 //start quiz function
 function startQuiz(){
     start.style.display ="none";
