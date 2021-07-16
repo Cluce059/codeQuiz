@@ -58,13 +58,14 @@ function counterRender(){
         //call itself again if still runnning quiz
         setTimeout("counterRender()", 1000);
     }
-    else{
+    else{        
         scoreRender();
+        return false;
     }
     //when timer reaches zero
 };
 
-//setTimeout("counterRender()",1000);//dont call this twice or it will process at double speed
+//dont call this twice or it will process at double speed
 
 //event listener for if user clicks an answer then call function to check it
 choices.addEventListener("click", answerHandler);
@@ -116,36 +117,47 @@ function scoreRender(){
     //use finascore l8r to add to locastorage
     var finalScore = count+1; //bc >= will stop at 0 and record score as -1 
     scoreContainer.innerHTML = ("Final score: " + finalScore);
-    saveScore(finalScore);
+    endPage(finalScore);
 };
 
-
-//using same variable name for convinience but finalscore is NOT global fyi 
-function saveScore(finalScore){
+//function to load end page
+function endPage(finalScore){
     //need to wipe questions from the visible dom
-    question.innerHTML = "";
-    choiceA.innerHTML = "";
-    choiceB.innerHTML = "";
-    choiceC.innerHTML = "";
+    counter.remove();
+    question.remove();
+    choiceA.remove();
+    choiceB.remove();
+    choiceC.remove();
     var finalPage = document.getElementById("score-page");
     finalPage.style.display = "block";
     //load username input els into dom
-    finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>" + "<p>" + "Enter your username!" + "</p>");
-    finalPage.innerHTML = ("<input type = 'text' name = 'username-input' class = 'text-input' placeholder='Enter a username to save your score!'/>");
-     //make save button
-    var saveButtonEl = document.createElement("button");
-    saveButtonEl.textContent ="Save";
-    saveButtonEl.className = "btn save-btn";
-    
-    var usernameInput = document.querySelector("input[name='username-input']").value.trim; 
-    //use [] to select attribute of an html element
-    console.log(usernameInput);
+    finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>" + "<p>"
+     + "Enter your username!" + "</p>");
+    finalPage.innerHTML = ("<input type = 'text' name = 'username-input' class = 'text-input' placeholder='Enter a username:'/>");
+    //store usernmae in a variable
+    ///var usernameInput = document.querySelector("input[name='username-input']").value.trim; 
+    //finalPage.innerHTML = ("<button class = 'btn save-btn'>" + "save" + "</button>");
+    //make save button
+    // var saveButtonEl = document.createElement("button");
+    // saveButtonEl.textContent ="Save";
+    // saveButtonEl.className = "btn save-btn";
+    //save score to localstorage
+    //saveButtonEl.addEventListener("click", saveScore(finalScore, usernameInput));
+};
 
+//using same variable name for convinience but finalscore is NOT global fyi 
+//function to save finalscore to localstorage
+function saveScore(finalScore, usernameInput){
+    //use [] to select attribute of an html element
     //check if input is empty string
     if(!usernameInput){
         //return to startgame
         startQuiz();
         //return false; debug to see if needed
+    }
+    else{
+        localStorage.setItem("finalScore", JSON.stringify(finalScore));
+        localStorage.setItem("usernameInput", JSON.stringify(usernameInput));
     }
     //make an array thatll have to be parsed (bc only strings are stored in locastorage)
     var score={
