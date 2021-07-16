@@ -1,5 +1,8 @@
 //first, update the innerhtml of quiz elements
 const start = document.getElementById("start");
+const timer = document.getElementById("timer");
+const timerCounter = document.getElementById("timer-counter");
+const alert =document.getElementById("alert");
 const quiz = document.getElementById("quiz");
 const question = document.getElementById("question");
 const counter = document.getElementById("counter");
@@ -7,7 +10,11 @@ const choiceA = document.getElementById("A");
 const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
 const scoreContainer = document.getElementById("score-container");
-
+// quiz time limit in seconds initialized to 60
+var count = 60;
+//need to loop and increment questionindex and call renderQuestion
+var questionIndex = 0;
+//called from start and every time there is another questin left unless time runs out
 //questions arr[] to access questions via index
 var questions = [
     //each el will be an obj of itself with a question, img, and 3 choices
@@ -33,11 +40,8 @@ var questions = [
         correct: "A"
     }
 ];
-
 const lastQuestionIndex = (questions.length - 1);
-//need to loop and increment questionindex and call renderQuestion
-var questionIndex = 0;
-    //called from start and every time there is another questin left unless time runs out
+
 function questionRender(){
     var q = questions[questionIndex];
     question.innerHTML ="<p>" +q.question + "</p>";
@@ -46,26 +50,26 @@ function questionRender(){
     choiceC.innerHTML = q.choiceC;
 };
 
-// quiz time limit in seconds initialized to 60
-var count = 60;
+//sos
+function time(){
+    var timerInterval = setTimeout(function(){
+        count --;
+    }, 1000);
+};
 
 //timer countdown function
 function counterRender(){
     //if time is left, check answers to see if we need to subtract time 
     if(count >= 0){
-        counter.innerHTML = ("Time remaining: " + count);
+        time();
         count --;
         //call itself again if still runnning quiz
-        setTimeout("counterRender()", 1000);
     }
     else{        
         scoreRender();
         return false;
     }
-    //when timer reaches zero
 };
-
-//dont call this twice or it will process at double speed
 
 //event listener for if user clicks an answer then call function to check it
 choices.addEventListener("click", answerHandler);
@@ -78,12 +82,17 @@ function answerHandler (event){
     //if correct move onto next question
     if(targetChoice === questions[questionIndex].correct){
         console.log(targetChoice);
+        alert.innerText= "Correct";
     }
     else{
-        console.log("wronge");
+        alert.innerHTML= "Incorrect";
         //if incorrect, minus 10 sex 4 u ;P
         count -= 10;
+        console.log(timer);
+        //timer.innerHTML = count;
     }
+    setTimeout(function(){
+        alert.innerHTML = "";}, 1000)
     //check if there are more questions before proceeding
     if(questionIndex < lastQuestionIndex){
         questionIndex ++;
@@ -91,23 +100,22 @@ function answerHandler (event){
     }
     //if was the last question bring up the score
     else{
+        //clearTimeout(TIMER);
         scoreRender();
     }
 };
 
-//event listener for start button, calling startquiz when clicked
-start.addEventListener("click", startQuiz); 
-
 //start quiz function
 function startQuiz(){
     start.style.display ="none";
-    counterRender();
-    //calls counterREnder every second: moved to counterrender for testing
-    //TIMER = setInterval(counterRender,1000);
+    quiz.style.display = "block";
     //pull up the first question
     questionRender();
-    quiz.style.display = "block";
+    time();
 };
+
+//event listener for start button, calling startquiz when clicked
+start.addEventListener("click", startQuiz); 
 
 //function to render score after last question
 function scoreRender(){
@@ -117,7 +125,6 @@ function scoreRender(){
     //use finascore l8r to add to locastorage
     var finalScore = count+1; //bc >= will stop at 0 and record score as -1 
     scoreContainer.innerHTML = ("Final score: " + finalScore);
-    endPage(finalScore);
 };
 
 //function to load end page
@@ -128,6 +135,7 @@ function endPage(finalScore){
     choiceA.remove();
     choiceB.remove();
     choiceC.remove();
+    //clear counter interval
     var finalPage = document.getElementById("score-page");
     finalPage.style.display = "block";
     //load username input els into dom
@@ -164,6 +172,7 @@ function saveScore(finalScore, usernameInput){
         score: finalScore,
         name: usernameInput
     }
+    
 };
 
 //TO DO:

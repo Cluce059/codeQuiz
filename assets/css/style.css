@@ -27,7 +27,8 @@
 
 .timer{
     font-weight: bold;
-
+    float: right;
+    font: var(--primary);
 }
 
 .question{
