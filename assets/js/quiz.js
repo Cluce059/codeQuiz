@@ -120,7 +120,7 @@ function scoreRender(){
 };
 
 
-//using same variable name for convinience but finalscore is NOT global fyi
+//using same variable name for convinience but finalscore is NOT global fyi 
 function saveScore(finalScore){
     //need to wipe questions from the visible dom
     question.innerHTML = "";
@@ -129,19 +129,30 @@ function saveScore(finalScore){
     choiceC.innerHTML = "";
     var finalPage = document.getElementById("score-page");
     finalPage.style.display = "block";
-    finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>");
-    //finalPage.inner
-    //TO DO still gotta wipe the count off the page too
-    var userName = prompt("Enter a username to save your high score!");
-    //localStorage.setItem(userName, JSON.stringify(userName));
-    //localStorage.setItem(finalScore, JSON.stringify(finalScore));
+    //load username input els into dom
+    finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>" + "<p>" + "Enter your username!" + "</p>");
+    finalPage.innerHTML = ("<input type = 'text' name = 'username-input' class = 'text-input' placeholder='Enter a username to save your score!'/>");
+     //make save button
+    var saveButtonEl = document.createElement("button");
+    saveButtonEl.textContent ="Save";
+    saveButtonEl.className = "btn save-btn";
+    
+    var usernameInput = document.querySelector("input[name='username-input']").value.trim; 
+    //use [] to select attribute of an html element
+    console.log(usernameInput);
+
+    //check if input is empty string
+    if(!usernameInput){
+        //return to startgame
+        startQuiz();
+        //return false; debug to see if needed
+    }
     //make an array thatll have to be parsed (bc only strings are stored in locastorage)
     var score={
         score: finalScore,
-        name: userName
+        name: usernameInput
     }
 };
-
 
 //TO DO:
 //- still gotta wipe the count off the page too
