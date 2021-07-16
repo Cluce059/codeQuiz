@@ -15,7 +15,6 @@ var questions = [
     //each el will be an obj of itself with a question, img, and 3 choices
     {
         question: "What does HTML stand for?",
-        //imgSrc: //INSERT GOOFY IMGS HERE AND FOR EACH OBJ
         choiceA: "Have Too Many Loofas",
         choiceB: "Hard To Make Love",
         choiceC: "Click here for testing correct",
@@ -23,7 +22,6 @@ var questions = [
     },
     {
         question: "What's my name?",
-        //imgSrc: //INSERT GOOFY IMGS HERE AND FOR EACH OBJ
         choiceA: "Dunkaccino",
         choiceB: "DMX",
         choiceC: "Click here for testing correct",
@@ -31,7 +29,6 @@ var questions = [
     },
     {
         question: "Why?",
-        //imgSrc: //INSERT GOOFY IMGS HERE AND FOR EACH OBJ
         choiceA: "Click here for testing correct",
         choiceB: "How?",
         choiceC: "hdkabfuiso",
@@ -39,46 +36,51 @@ var questions = [
     }
 ];
 
-
 const lastQuestionIndex = (questions.length - 1);
-var questionIndex = 0;
 //need to loop and increment questionindex and call renderQuestion
-
+var questionIndex = 0;
     //called from start and every time there is another questin left unless time runs out
 function questionRender(){
     var q = questions[questionIndex];
-    //qImg.innerHTML = "<img src=" + q.imgSrc + ">"; //UPDATE IMG HERE
     question.innerHTML ="<p>" +q.question + "</p>";
     choiceA.innerHTML = q.choiceA;
     choiceB.innerHTML = q.choiceB;
     choiceC.innerHTML = q.choiceC;
-    //increase question index for next ime it's called ???
-    //q++;
 };
 
-// quiz time limit in seconds
+// quiz time limit in seconds initialized to 60
 var count = 60;
+
 //timer countdown function
 function counterRender(){
     //if time is left, check answers to see if we need to subtract time 
-    while(count > 0){
-        counter.innerHTML =count;
+    if(count >= 0){
+        counter.innerHTML = ("Time remaining: " + count);
         count --;
+        //call itself again if still runnning quiz
+        setTimeout("counterRender()", 1000);
     }
+    else{
+        scoreRender();
+    }
+    //when timer reaches zero
 };
+
+//setTimeout("counterRender()",1000);//dont call this twice or it will process at double speed
 
 //event listener for if user clicks an answer then call function to check it
 choices.addEventListener("click", answerHandler);
+
 //checkanswer function that takes user's input
 var score = 0;
+
 function answerHandler (event){
     event.preventDefault();
-    //add event listeners for each choice
-    A.addEventListener("click");
+    //if user picks corrrect choice
+    
     //if correct, update score and move onto next question
     //check if there are more questions before proceeding
     if(questionIndex < lastQuestionIndex){
-        count =0 ;
         questionIndex ++;
         questionRender();
     }
@@ -96,8 +98,8 @@ var TIMER;
 function startQuiz(){
     start.style.display ="none";
     counterRender();
-    //calls counterREnder every second
-    TIMER = setInterval(counterRender,1000);
+    //calls counterREnder every second: moved to counterrender for testing
+    //TIMER = setInterval(counterRender,1000);
     //pull up the first question
     questionRender();
     quiz.style.display = "block";
