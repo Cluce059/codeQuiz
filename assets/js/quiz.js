@@ -71,20 +71,19 @@ function counterRender(){
 //event listener for if user clicks an answer then call function to check it
 choices.addEventListener("click", answerHandler);
 
-//checkanswer function that takes user's input
-var score = 0;
-
+//checkanswer function that takes user's input from event listeners
 function answerHandler (event){
     event.preventDefault();
     //if user picks corrrect choice
     var targetChoice = event.target.id;
-    
-    //if correct, update score and move onto next question
+    //if correct move onto next question
     if(targetChoice === questions[questionIndex].correct){
         console.log(targetChoice);
     }
     else{
         console.log("wronge");
+        //if incorrect, minus 10 sex 4 u ;P
+        count -= 10;
     }
     //check if there are more questions before proceeding
     if(questionIndex < lastQuestionIndex){
@@ -115,10 +114,8 @@ function startQuiz(){
 function scoreRender(){
     var scoreContainer = document.getElementById("score-container");
     //add score conatiner to inner html to change when score changes
-    //".quiz".innerHTML = ""
     scoreContainer.style.display ="block";
-    var scorePercentage = (100 * score/question.length);
-    //console.log(scorePercentage);
-    //var img: for these extra credit images, go to 18:50 of the codeexplainer video but try to do this/the rest on your own!
+    var finalScore = count;
+    scoreContainer.innerHTML = ("Final score " + count);
 };
 
