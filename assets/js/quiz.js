@@ -12,6 +12,7 @@ const choiceC = document.getElementById("C");
 const scoreContainer = document.getElementById("score-container");
 // quiz time limit in seconds initialized to 60
 var count = 60;
+var score = 0;
 //need to loop and increment questionindex and call renderQuestion
 var questionIndex = 0;
 //called from start and every time there is another questin left unless time runs out
@@ -50,11 +51,38 @@ function questionRender(){
     choiceC.innerHTML = q.choiceC;
 };
 
+var timeElapsed = 0;
 //sos
 function time(){
     var timerInterval = setTimeout(function(){
-        count --;
+        timeElapsed ++;
+        timer.textContent = count - timeElapsed;
+        if(timeElapsed >= count){
+            questionRender();
+            nextQuestion();
+        }
     }, 1000);
+};
+
+//next question to handle when timer stops
+function nextQuestion(){
+    questionIndex ++;
+    if(questionIndex < questions.length){
+        questionRender();
+    }
+    else{
+        stopTimer();
+        if((count - timeElapsed) > 0){
+            //set score = current time
+            score += (count -timeElapsed);
+        }
+    }
+};
+
+var interval;
+//stops timer
+function stopTimer(){
+    clearInterval(timerInterval);
 };
 
 //timer countdown function
@@ -66,8 +94,8 @@ function counterRender(){
         //call itself again if still runnning quiz
     }
     else{        
+        stopTimer();
         scoreRender();
-        return false;
     }
 };
 
@@ -87,7 +115,7 @@ function answerHandler (event){
     else{
         alert.innerHTML= "Incorrect";
         //if incorrect, minus 10 sex 4 u ;P
-        count -= 10;
+        count += 10;
         console.log(timer);
         //timer.innerHTML = count;
     }
