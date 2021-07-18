@@ -97,7 +97,7 @@ function answerHandler (event){
     else{
         alert.innerHTML= "Incorrect";
         //if incorrect, minus 10 sex 4 u ;P
-        count += 10;
+        count -= 10;
         console.log(timer);
         //timer.innerHTML = count;
     }
