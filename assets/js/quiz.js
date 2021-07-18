@@ -1,7 +1,7 @@
 //first, update the innerhtml of quiz elements
 const start = document.getElementById("start");
 const timer = document.getElementById("timer");
-const timerCounter = document.getElementById("timer-counter");
+
 const alert =document.getElementById("alert");
 const quiz = document.getElementById("quiz");
 const question = document.getElementById("question");
@@ -15,6 +15,7 @@ var count = 60;
 var score = 0;
 //need to loop and increment questionindex and call renderQuestion
 var questionIndex = 0;
+var timerInterval;
 //called from start and every time there is another questin left unless time runs out
 //questions arr[] to access questions via index
 var questions = [
@@ -43,25 +44,23 @@ var questions = [
 ];
 const lastQuestionIndex = (questions.length - 1);
 
-function questionRender(){
-    var q = questions[questionIndex];
-    question.innerHTML ="<p>" +q.question + "</p>";
-    choiceA.innerHTML = q.choiceA;
-    choiceB.innerHTML = q.choiceB;
-    choiceC.innerHTML = q.choiceC;
-};
-
+//function ti start timercountdown
 var timeElapsed = 0;
-//sos
-function time(){
-    var timerInterval = setTimeout(function(){
+function timeStart(){
+    timer.textContent = count;
+    timerInterval = setInterval(function(){
         timeElapsed ++;
         timer.textContent = count - timeElapsed;
         if(timeElapsed >= count){
-            questionRender();
+            questionIndex = questions.length;
             nextQuestion();
         }
     }, 1000);
+};
+
+//stops timer
+function stopTimer(){
+    clearInterval(timerInterval);
 };
 
 //next question to handle when timer stops
@@ -76,26 +75,9 @@ function nextQuestion(){
             //set score = current time
             score += (count -timeElapsed);
         }
-    }
-};
-
-var interval;
-//stops timer
-function stopTimer(){
-    clearInterval(timerInterval);
-};
-
-//timer countdown function
-function counterRender(){
-    //if time is left, check answers to see if we need to subtract time 
-    if(count >= 0){
-        time();
-        count --;
-        //call itself again if still runnning quiz
-    }
-    else{        
-        stopTimer();
-        scoreRender();
+            //get rid of quiz bc it has ended
+            scoreRender();
+            timer.textContent = 0;
     }
 };
 
@@ -139,11 +121,14 @@ function startQuiz(){
     quiz.style.display = "block";
     //pull up the first question
     questionRender();
-    time();
+    timeStart();
 };
 
 //event listener for start button, calling startquiz when clicked
 start.addEventListener("click", startQuiz); 
+
+
+///////////////////////////////////RENDERING FUNCTIONS///////////////////////////////////
 
 //function to render score after last question
 function scoreRender(){
@@ -153,6 +138,14 @@ function scoreRender(){
     //use finascore l8r to add to locastorage
     var finalScore = count+1; //bc >= will stop at 0 and record score as -1 
     scoreContainer.innerHTML = ("Final score: " + finalScore);
+};
+
+function questionRender(){
+    var q = questions[questionIndex];
+    question.innerHTML ="<p>" +q.question + "</p>";
+    choiceA.innerHTML = q.choiceA;
+    choiceB.innerHTML = q.choiceB;
+    choiceC.innerHTML = q.choiceC;
 };
 
 //function to load end page
