@@ -91,18 +91,15 @@ function answerHandler (event){
     var targetChoice = event.target.id;
     //if correct move onto next question
     if(targetChoice === questions[questionIndex].correct){
-        console.log(targetChoice);
-        alert.innerText= "Correct";
+        displayMessage("Correct");
+        
     }
     else{
-        alert.innerHTML= "Incorrect";
+        displayMessage("Incorrect");
         //if incorrect, minus 10 sex 4 u ;P
         count -= 10;
-        console.log(timer);
         //timer.innerHTML = count;
     }
-    setTimeout(function(){
-        alert.innerHTML = "";}, 1000)
     //check if there are more questions before proceeding
     if(questionIndex < lastQuestionIndex){
         questionIndex ++;
@@ -115,9 +112,26 @@ function answerHandler (event){
     }
 };
 
+//tells user if theyre right or not
+function displayMessage(message) {
+    //create msg div and hr to make msg vidually seperate from quiz content ie <ht. tag
+    var messageHr = document.createElement("hr");
+    var messageEl = document.createElement("div");
+    messageEl.textContent = message;
+    //append msg to end of quiz content w line ... for two seconds only
+    document.querySelector(".quiz").appendChild(messageHr);
+    document.querySelector(".quiz").appendChild(messageEl);
+    setTimeout(function () {
+        messageHr.remove();
+        messageEl.remove();
+    }, 2000);
+};
+
 //start quiz function
 function startQuiz(){
+    //get rid of start..
     start.style.display ="none";
+    //and bring in the quiz content
     quiz.style.display = "block";
     //pull up the first question
     questionRender();
@@ -126,7 +140,6 @@ function startQuiz(){
 
 //event listener for start button, calling startquiz when clicked
 start.addEventListener("click", startQuiz); 
-
 
 ///////////////////////////////////RENDERING FUNCTIONS///////////////////////////////////
 
