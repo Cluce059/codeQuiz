@@ -14,7 +14,7 @@
         <h1>Start Quiz!</h1>
     </button>    
 </div>
-<div id="quiz" class = "quiz" style ="display: none"><!--maybe transllate this into css idk yet-->
+<div id="quiz" class = "quiz" style ="display: none"><!--hide quiz display until start event listener is triggered-->
     <div id="question">
         <!--questions loaded into dom here from quiz.js-->
         <h1 id="alert"></h1>
@@ -39,8 +39,13 @@
     <div id="score-page" style ="display:none">
         <h1></h1>
     </div>
-
-    
+    <!--displaying highscores after game ends-->
+    <div id = "highscores">
+        <h1>Highscores</h1>
+        <div id="scores"></div>
+        <button type="button" id="goBack">Go Back</button>
+        <button type="button" id="clearScores">Clear Scores</button> 
+    </div>
 <script src="assets/js/quiz.js"></script>
 
 </body>

@@ -1,18 +1,21 @@
 //first, update the innerhtml of quiz elements
 const start = document.getElementById("start");
 const timer = document.getElementById("timer");
-
 const alert =document.getElementById("alert");
 const quiz = document.getElementById("quiz");
+const scores = document.getElementById("scores");
 const question = document.getElementById("question");
 const counter = document.getElementById("counter");
 const choiceA = document.getElementById("A");
 const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
 const scoreContainer = document.getElementById("score-container");
+const highscoresEl = document.getElementById("highscores");
 // quiz time limit in seconds initialized to 60
 var count = 60;
 var score = 0;
+//create an empty arr to hold the highscores that have to be stringified to get in localstorage anyway
+var highscores = [];
 //need to loop and increment questionindex and call renderQuestion
 var questionIndex = 0;
 var timerInterval;
@@ -23,22 +26,22 @@ var questions = [
     {
         question: "What does HTML stand for?",
         choiceA: "Have Too Many Loofas",
-        choiceB: "Hard To Make Love",
-        choiceC: "Click here for testing correct",
+        choiceB: "Hard To Manage Loofas",
+        choiceC: "Hyper Text Markup Language",
         correct: "C"
     },
     {
-        question: "What's my name?",
-        choiceA: "Dunkaccino",
-        choiceB: "DMX",
-        choiceC: "Click here for testing correct",
+        question: "What do you use to enclose array content?",
+        choiceA: "{}",
+        choiceB: "()",
+        choiceC: "[]",
         correct: "C"
     },
     {
-        question: "Why?",
-        choiceA: "Click here for testing correct",
-        choiceB: "How?",
-        choiceC: "hdkabfuiso",
+        question: "How can you select a DOM element, or any element, using javascript?",
+        choiceA: "getElementByID method",
+        choiceB: "getItemByClass method",
+        choiceC: "select it with your cursor methid",
         correct: "A"
     }
 ];
@@ -48,6 +51,7 @@ const lastQuestionIndex = (questions.length - 1);
 var timeElapsed = 0;
 function timeStart(){
     timer.textContent = count;
+    //console.log(count);
     timerInterval = setInterval(function(){
         timeElapsed ++;
         timer.textContent = count - timeElapsed;
@@ -74,15 +78,13 @@ function nextQuestion(){
         if((count - timeElapsed) > 0){
             //set score = current time
             score += (count -timeElapsed);
+            console.log("use score of correct" + score);
         }
             //get rid of quiz bc it has ended
             scoreRender();
             timer.textContent = 0;
     }
 };
-
-//event listener for if user clicks an answer then call function to check it
-choices.addEventListener("click", answerHandler);
 
 //checkanswer function that takes user's input from event listeners
 function answerHandler (event){
@@ -91,13 +93,13 @@ function answerHandler (event){
     var targetChoice = event.target.id;
     //if correct move onto next question
     if(targetChoice === questions[questionIndex].correct){
-        displayMessage("Correct");
-        
+        displayMessage("Correct"); 
     }
     else{
         displayMessage("Incorrect");
         //if incorrect, minus 10 sex 4 u ;P
         count -= 10;
+        //console.log(count);
         //timer.innerHTML = count;
     }
     //check if there are more questions before proceeding
@@ -107,50 +109,44 @@ function answerHandler (event){
     }
     //if was the last question bring up the score
     else{
-        //clearTimeout(TIMER);
-        scoreRender();
+        stopTimer();
+        scoreRender(count);
     }
 };
+
+//start quiz function
+function startQuiz(){
+    //get rid of start..
+    hide(start);
+    //and bring in the quiz content
+    display(quiz);
+    //pull up the first question
+    questionRender();
+    timeStart();
+};
+//function to reset the game if user choses to play again
+function reset(){
+    finalScore = 0;
+    questionIndex = 0;
+    timeElapsed = 0;
+    timer = 0;
+};
+
+///////////////////////////////////RENDERING FUNCTIONS///////////////////////////////////
 
 //tells user if theyre right or not
 function displayMessage(message) {
     //create msg div and hr to make msg vidually seperate from quiz content ie <ht. tag
     var messageHr = document.createElement("hr");
     var messageEl = document.createElement("div");
-    messageEl.textContent = message;
-    //append msg to end of quiz content w line ... for two seconds only
+    messageEl.textContent =message;
+    //append msg to end of quiz content w line ... for 3 seconds only
     document.querySelector(".quiz").appendChild(messageHr);
     document.querySelector(".quiz").appendChild(messageEl);
     setTimeout(function () {
         messageHr.remove();
         messageEl.remove();
-    }, 2000);
-};
-
-//start quiz function
-function startQuiz(){
-    //get rid of start..
-    start.style.display ="none";
-    //and bring in the quiz content
-    quiz.style.display = "block";
-    //pull up the first question
-    questionRender();
-    timeStart();
-};
-
-//event listener for start button, calling startquiz when clicked
-start.addEventListener("click", startQuiz); 
-
-///////////////////////////////////RENDERING FUNCTIONS///////////////////////////////////
-
-//function to render score after last question
-function scoreRender(){
-    var scoreContainer = document.getElementById("score-container");
-    //add score conatiner to inner html to change when score changes
-    scoreContainer.style.display ="block";
-    //use finascore l8r to add to locastorage
-    var finalScore = count+1; //bc >= will stop at 0 and record score as -1 
-    scoreContainer.innerHTML = ("Final score: " + finalScore);
+    }, 3000);
 };
 
 function questionRender(){
@@ -171,7 +167,7 @@ function endPage(finalScore){
     choiceC.remove();
     //clear counter interval
     var finalPage = document.getElementById("score-page");
-    finalPage.style.display = "block";
+    display(finalPage);
     //load username input els into dom
     finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>" + "<p>"
      + "Enter your username!" + "</p>");
@@ -189,27 +185,31 @@ function endPage(finalScore){
 
 //using same variable name for convinience but finalscore is NOT global fyi 
 //function to save finalscore to localstorage
-function saveScore(finalScore, usernameInput){
-    //use [] to select attribute of an html element
-    //check if input is empty string
-    if(!usernameInput){
-        //return to startgame
-        startQuiz();
-        //return false; debug to see if needed
+//function to display high scores
+function scoreRender(){
+    score.innerHTML = "";
+    display(highscoresEl);
+    highscores = JSON.parse(localStorage.getItem("scores"));
+    for(var i =0; i < highscores.length; i++){
+        var playerScore = document.createElement("div");
+        playerScore.textContent = score;
+        highscores.appendChild(playerScore);
     }
-    else{
-        localStorage.setItem("finalScore", JSON.stringify(finalScore));
-        localStorage.setItem("usernameInput", JSON.stringify(usernameInput));
-    }
-    //make an array thatll have to be parsed (bc only strings are stored in locastorage)
-    var score={
-        score: finalScore,
-        name: usernameInput
-    }
-    
+};
+//////////////////////event listeners/////////////////////////////
+//event listener for if user clicks an answer then call function to check it
+choices.addEventListener("click", answerHandler);
+//event listener for start button, calling startquiz when clicked
+start.addEventListener("click", startQuiz); 
+
+//need these functions to handle the el appearances bc its too much to handle per function 
+//hides element
+function hide(element) {
+    element.style.display = "none";
 };
 
-//TO DO:
-//- still gotta wipe the count off the page too
-// - end quiz at last question...still loops when done:/
-//display high scores on a page at the end
+//displays element
+function display(element) {
+    element.style.display = "block";
+};
+

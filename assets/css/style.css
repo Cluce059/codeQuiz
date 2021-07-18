@@ -31,8 +31,11 @@
     font: var(--primary);
 }
 
-.question{
+.choices{
     font-weight: bold;
+    background-color: var(--primary);
+    border-color: var(--primary);
+    border-radius: 25px;
 }
 
 body {
@@ -44,6 +47,10 @@ body {
     min-height: 100vh;
     flex-direction: column;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.choice{
+    background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
 }
 
 .choices div{
@@ -63,4 +70,18 @@ body {
     color: -internal-light-dark(black, white);
     letter-spacing: normal;
     word-spacing: normal;
+}
+
+.quiz{
+    margin: auto;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+
+.highscores h1{
+    font-weight: bold;
+    margin: auto;
 }
