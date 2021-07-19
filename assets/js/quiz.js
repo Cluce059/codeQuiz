@@ -3,6 +3,7 @@ const start = document.getElementById("start");
 const timer = document.getElementById("timer");
 const alert =document.getElementById("alert");
 const quiz = document.getElementById("quiz");
+const scoreInput = document.getElementById("scoreInput");
 const scores = document.getElementById("scores");
 const question = document.getElementById("question");
 const counter = document.getElementById("counter");
@@ -41,7 +42,7 @@ var questions = [
         question: "How can you select a DOM element, or any element, using javascript?",
         choiceA: "getElementByID method",
         choiceB: "getItemByClass method",
-        choiceC: "select it with your cursor methid",
+        choiceC: "select it with your cursor method",
         correct: "A"
     }
 ];
@@ -82,6 +83,7 @@ function nextQuestion(){
         }
             //get rid of quiz bc it has ended
             scoreRender();
+            display(scoreInput);
             timer.textContent = 0;
     }
 };
@@ -110,7 +112,7 @@ function answerHandler (event){
     //if was the last question bring up the score
     else{
         stopTimer();
-        scoreRender(count);
+        scoreRender();
     }
 };
 
@@ -183,17 +185,16 @@ function endPage(finalScore){
     //saveButtonEl.addEventListener("click", saveScore(finalScore, usernameInput));
 };
 
-//using same variable name for convinience but finalscore is NOT global fyi 
-//function to save finalscore to localstorage
 //function to display high scores
 function scoreRender(){
-    score.innerHTML = "";
+    hide(quiz);
     display(highscoresEl);
     highscores = JSON.parse(localStorage.getItem("scores"));
-    for(var i =0; i < highscores.length; i++){
-        var playerScore = document.createElement("div");
-        playerScore.textContent = score;
-        highscores.appendChild(playerScore);
+    for(var i = 0; i < highscores.length; i++){
+     var playerScore = document.createElement("div");
+    playerScore.textContent = score;
+    playerScore.textContent = highscores[i].username + highscores.userscore;
+    highscores.appendChild(playerScore);
     }
 };
 //////////////////////event listeners/////////////////////////////
@@ -201,6 +202,38 @@ function scoreRender(){
 choices.addEventListener("click", answerHandler);
 //event listener for start button, calling startquiz when clicked
 start.addEventListener("click", startQuiz); 
+
+//button to view all high scores
+viewScores.addEventListener("click", function(){
+    hide(quiz);
+    display(scoreInput);
+    scoreRender();
+    stopTimer();
+    reset();
+});
+
+initialsSubmit.addEventListener("click", function(){
+    var initInitial = initials.val().trim();
+    //if there is already ahs saved in localstorage
+    if(initInitial){
+        var userScore = {username:initInitial, userscore:score};
+        initials.val = '';
+        //picked up this trick from another code, p useful to have the empty arr option
+        highscores = JSON.parse(localStorage.getItem("scores")) || [];
+        highscores.push(userscore);
+        localStorage.setItem("scores", JSON.stringify(highscores));
+        hide(scoreInput);
+        scoreRender();
+        reset();
+    }
+
+})
+
+
+
+
+
+
 
 //need these functions to handle the el appearances bc its too much to handle per function 
 //hides element

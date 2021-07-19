@@ -39,11 +39,19 @@
     <div id="score-page" style ="display:none">
         <h1></h1>
     </div>
+    <!--taking input for user scores-->
+    <div id = scoreInput>
+        <h1>All Done!</h1>
+        <p>Your Score: <span id = "score"></span></p>
+        <p>Enter Initials: <input type = "text" id = "initials"></p>
+        <button type = "button" id = "initialsSubmit"></button>
+    </div>
     <!--displaying highscores after game ends-->
     <div id = "highscores">
         <h1>Highscores</h1>
         <div id="scores"></div>
         <button type="button" id="goBack">Go Back</button>
+        <button type = button id ="viewScores">View Scores</button>
         <button type="button" id="clearScores">Clear Scores</button> 
     </div>
 <script src="assets/js/quiz.js"></script>
