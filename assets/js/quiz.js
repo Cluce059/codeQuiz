@@ -174,7 +174,7 @@ function endPage(finalScore){
     finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>" + "<p>"
      + "Enter your username!" + "</p>");
     finalPage.innerHTML = ("<input type = 'text' name = 'username-input' class = 'text-input' placeholder='Enter a username:'/>");
-    //store usernmae in a variable
+    //store usernmae in a variable 
     ///var usernameInput = document.querySelector("input[name='username-input']").value.trim; 
     //finalPage.innerHTML = ("<button class = 'btn save-btn'>" + "save" + "</button>");
     //make save button
