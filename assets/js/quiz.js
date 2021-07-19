@@ -12,6 +12,7 @@ const choiceB = document.getElementById("B");
 const choiceC = document.getElementById("C");
 const scoreContainer = document.getElementById("score-container");
 const highscoresEl = document.getElementById("highscores");
+
 // quiz time limit in seconds initialized to 60
 var count = 60;
 var score = 0;
