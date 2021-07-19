@@ -21,6 +21,7 @@ var highscores = [];
 //need to loop and increment questionindex and call renderQuestion
 var questionIndex = 0;
 var timerInterval;
+var timeElapsed = 0;
 //called from start and every time there is another questin left unless time runs out
 //questions arr[] to access questions via index
 var questions = [
@@ -47,10 +48,10 @@ var questions = [
         correct: "A"
     }
 ];
+
 const lastQuestionIndex = (questions.length - 1);
 
-//function ti start timercountdown
-var timeElapsed = 0;
+//function to start timercountdown
 function timeStart(){
     timer.textContent = count;
     //console.log(count);
@@ -105,6 +106,8 @@ function answerHandler (event){
         //console.log(count);
         //timer.innerHTML = count;
     }
+};
+
     //check if there are more questions before proceeding
     if(questionIndex < lastQuestionIndex){
         questionIndex ++;
@@ -115,7 +118,7 @@ function answerHandler (event){
         stopTimer();
         scoreRender();
     }
-};
+
 
 //start quiz function
 function startQuiz(){
@@ -153,7 +156,11 @@ function displayMessage(message) {
 };
 
 function questionRender(){
+    question.textContent = questions[questionIndex].title;
     var q = questions[questionIndex];
+    for(var i = 0; i < choices.children.length; i++){
+        choices.children[i].children[0].textContent = score;
+    }
     question.innerHTML ="<p>" +q.question + "</p>";
     choiceA.innerHTML = q.choiceA;
     choiceB.innerHTML = q.choiceB;
