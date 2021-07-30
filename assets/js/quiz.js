@@ -1,18 +1,18 @@
 //first, update the innerhtml of quiz elements
-const start = document.getElementById("start");
-const timer = document.getElementById("timer");
-const alert =document.getElementById("alert");
-const quiz = document.getElementById("quiz");
-const scoreInput = document.getElementById("scoreInput");
-const scores = document.getElementById("scores");
-const question = document.getElementById("question");
-const counter = document.getElementById("counter");
-const choiceA = document.getElementById("A");
-const choiceB = document.getElementById("B");
-const choiceC = document.getElementById("C");
-const scoreContainer = document.getElementById("score-container");
-const highscoresEl = document.getElementById("highscores");
-
+var startPageEl = document.getElementById("start-page");
+var timerEl = document.getElementById("timer");
+var startButton = document.getElementById("start-btn");
+var quizContainerEl = document.getElementById("quiz-container");
+var scoreEl = document.getElementById("highScoreInput");
+var initialsInputEl = document.getElementById("initials-input");
+var scores = document.getElementById("scores");
+var questionEl = document.getElementById("question");
+var counter = document.getElementById("counter");
+var choiceA = document.getElementById("A");
+var choiceB = document.getElementById("B");
+var choiceC = document.getElementById("C");
+var scoreContainer = document.getElementById("score-container");
+var highscoresEl = document.getElementById("highscores");
 // quiz time limit in seconds initialized to 60
 var count = 60;
 var score = 0;
@@ -49,7 +49,7 @@ var questions = [
     }
 ];
 
-const lastQuestionIndex = (questions.length - 1);
+var lastQuestionIndex = (questions.length - 1);
 
 //function to start timercountdown
 function timeStart(){
@@ -68,6 +68,10 @@ function timeStart(){
 //stops timer
 function stopTimer(){
     clearInterval(timerInterval);
+};
+//function to display a question
+function questionRender(){
+    questionEl.textContent = questions[0].question;
 };
 
 //next question to handle when timer stops
@@ -121,15 +125,17 @@ function answerHandler (event){
 
 
 //start quiz function
-function startQuiz(){
-    //get rid of start..
-    hide(start);
-    //and bring in the quiz content
-    display(quiz);
+function startQuiz(event){
+    event.preventDefault;
+    startPageEl.classList.remove("display");
+    startPageEl.classList.add("hidden");
+    quizContainerEl.classList.remove("hidden");
+    quizContainerEl.classList.add("display");
     //pull up the first question
     questionRender();
     timeStart();
 };
+
 //function to reset the game if user choses to play again
 function reset(){
     finalScore = 0;
@@ -155,16 +161,9 @@ function displayMessage(message) {
     }, 3000);
 };
 
-function questionRender(){
-    question.textContent = questions[questionIndex].title;
-    var q = questions[questionIndex];
-    for(var i = 0; i < choices.children.length; i++){
-        choices.children[i].children[0].textContent = score;
-    }
-    question.innerHTML ="<p>" +q.question + "</p>";
-    choiceA.innerHTML = q.choiceA;
-    choiceB.innerHTML = q.choiceB;
-    choiceC.innerHTML = q.choiceC;
+//function to display quiz content
+function displayQuiz(){
+
 };
 
 //function to load end page
@@ -209,7 +208,7 @@ function scoreRender(){
 //event listener for if user clicks an answer then call function to check it
 choices.addEventListener("click", answerHandler);
 //event listener for start button, calling startquiz when clicked
-start.addEventListener("click", startQuiz); 
+startPageEl.addEventListener("click", startQuiz); 
 
 //button to view all high scores
 viewScores.addEventListener("click", function(){
@@ -236,13 +235,6 @@ initialsSubmit.addEventListener("click", function(){
     }
 
 })
-
-
-
-
-
-
-
 //need these functions to handle the el appearances bc its too much to handle per function 
 //hides element
 function hide(element) {

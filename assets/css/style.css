@@ -1,7 +1,12 @@
 * {
     box-sizing: border-box;
 }
- 
+.display{
+    display: block;
+}
+.hidden{
+    display: none;
+}
 :root {
     --primary: #44e9ff;
     --secondary: #497980;

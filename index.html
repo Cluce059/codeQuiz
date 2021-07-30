@@ -9,15 +9,15 @@
 </head>
 <body>
 <!--button to start quiz-->
-<div id ="start" class ="start">
-    <button class = "start-button">
+<div id ="start-page" class ="display">
+    <button class = "start-button" id = "start-btn">
         <h1>Start Quiz!</h1>
     </button>    
 </div>
-<div id="quiz" class = "quiz" style ="display: none"><!--hide quiz display until start event listener is triggered-->
-    <div id="question">
+<div id="quiz-container" class = "quiz" class = "hidden"><!--hide quiz display until start event listener is triggered-->
+    <div id="question-container">
+        <h1 id = "question"></h1>
         <!--questions loaded into dom here from quiz.js-->
-        <h1 id="alert"></h1>
     </div>
     <!--choices-->
     <div id="choices" class = "choices">
@@ -32,22 +32,22 @@
     </div> 
     <!--this is the quiz end div mind u-->
     <!--score page-->
-    <div id="score-container" style ="display:none">
+    <div id="score-container" class = "hidden">
         <h1>All Done</h1>
         <p 
     </div>
-    <div id="score-page" style ="display:none">
+    <div id="score-page" class = "hidden">
         <h1></h1>
     </div>
     <!--taking input for user scores-->
-    <div id = scoreInput>
+    <div id = highScoreInput>
         <h1>All Done!</h1>
         <p>Your Score: <span id = "score"></span></p>
-        <p>Enter Initials: <input type = "text" id = "initials"></p>
+        <p>Enter Initials: <input type = "text" id = "initials-input"></p>
         <button type = "button" id = "initialsSubmit"></button>
     </div>
     <!--displaying highscores after game ends-->
-    <div id = "highscores">
+    <div id = "highscores" class = "hidden">
         <h1>Highscores</h1>
         <div id="scores"></div>
         <button type="button" id="goBack">Go Back</button>
