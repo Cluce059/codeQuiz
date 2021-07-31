@@ -1,15 +1,17 @@
 //first, update the innerhtml of quiz elements
 var startPageEl = document.getElementById("start-page");
 var timerEl = document.getElementById("timer");
+var timerContainer = document.getElementById("time-container");
+var finalTime = document.getElementById("time");
 var startButton = document.getElementById("start-btn");
 var quizContainerEl = document.getElementById("quiz-container");
-var scoreEl = document.getElementById("highScoreInput");
+var highScorePage = document.getElementById("highScorePage");
 var initialsInputEl = document.getElementById("initials-input");
 var scores = document.getElementById("scores");
 var questionEl = document.getElementById("question");
 var counter = document.getElementById("counter");
 var choices = document.getElementById("choices");
-var scoreContainer = document.getElementById("score-container");
+var scoreContainerEl = document.getElementById("score-container");
 var highscoresEl = document.getElementById("highscores");
 var choiceA = document.getElementById("btnA");
 var choiceB = document.getElementById("btnB");
@@ -53,19 +55,10 @@ var questions = [
 var lastQuestionIndex = (questions.length - 1);
 
 //function to start timercountdown
-function timeStart(){
-    timer.textContent = count;
-    //console.log(count);
-    timerInterval = setInterval(function(){
-        timeElapsed ++;
-        timer.textContent = count - timeElapsed;
-        if(timeElapsed >= count){
-            questionIndex = questions.length;
-            //nextQuestion();
+function setQuiz(){
 
-        }
-    }, 1000);
 };
+
 
 //stops timer
 function stopTimer(){
@@ -85,6 +78,16 @@ function startQuiz(event){
     event.preventDefault;
     hide(startPageEl);
     display(quizContainerEl);
+    var startTimer = setInterval(function(){
+        count --;
+        timerEl.textContent = count;
+        if(count <= 0){
+            clearInterval(startTimer);
+            if(questionIndex < questions.lenght - 1){
+                gameOver();
+            }
+        }
+    }, 1000);
     //hardcoded in the 0 to start at first question every time
     nextQuestion();
     //timeStart();
@@ -99,7 +102,6 @@ function reset(){
 };
 
 ///////////////////////////////////RENDERING FUNCTIONS///////////////////////////////////
-
 //tells user if theyre right or not
 function displayMessage(message) {
     //create msg div and hr to make msg vidually seperate from quiz content ie <ht. tag
@@ -152,6 +154,7 @@ function scoreRender(){
 
 //function to check answer and move onto next question
 function checkAnswer(choiceIndex){
+    var lineBreak = document.getElementById("lineBreak");
     if(questions[questionIndex].choices[choiceIndex] === questions[questionIndex].correct){
         answerCheck.textContent = "Correct!";
     }
@@ -170,7 +173,9 @@ function checkAnswer(choiceIndex){
 //function to hide quiz content when game ends
 function gameOver(){
     hide(quizContainerEl);
-    console.log("end");
+    display(scoreContainerEl);
+    hide(timerEl);
+    //display(finalTime);
 };
 
 //check answer using the index of target
