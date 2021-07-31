@@ -9,22 +9,23 @@
 </head>
 <body>
 <!--button to start quiz-->
-<div id ="start-page" class ="display">
+<div id ="start-page" style="display: block;">
     <button class = "start-button" id = "start-btn">
         <h1>Start Quiz!</h1>
     </button>    
 </div>
-<div id="quiz-container" class = "quiz" class = "hidden"><!--hide quiz display until start event listener is triggered-->
+<div id="quiz-container" class = "quiz" style = "display: none;"><!--hide quiz display until start event listener is triggered-->
     <div id="question-container">
         <h1 id = "question"></h1>
-        <!--questions loaded into dom here from quiz.js-->
     </div>
-    <!--choices-->
-    <div id="choices" class = "choices">
-        <div class= "choice" id="A">A</div> <!--onclick="checkAnswer('A')" not sure if i can use this method-->
-        <div class="choice" id="B">B</div>
-        <div class="choice" id="C">C</div>
-    </div>
+        <div class="pl-5 pt-2 pb-3 m-2 justify-content-center">
+            <p><button id="btnA" class="btn btn-dark"></button></p>
+            <p><button id="btnB" class="btn btn-dark"></button></p>
+            <p><button id="btnC" class="btn btn-dark"></button></p>
+            <!--google this el-->
+            <hr id="lineBreak"  class="mt-4 hidden">
+            <p id="answerCheck" class = "hidden"></p>
+        </div>
     <!--timer-->
     <div id="time-container">
         <div>Timer :  <span id = "timer">0</span></div>
@@ -32,22 +33,22 @@
     </div> 
     <!--this is the quiz end div mind u-->
     <!--score page-->
-    <div id="score-container" class = "hidden">
+    <div id="score-container" style="display: none;">
         <h1>All Done</h1>
         <p 
     </div>
-    <div id="score-page" class = "hidden">
+    <div id="score-page" style="display: none;">
         <h1></h1>
     </div>
     <!--taking input for user scores-->
-    <div id = highScoreInput>
+    <div id = highScoreInput style="display: none;">
         <h1>All Done!</h1>
         <p>Your Score: <span id = "score"></span></p>
         <p>Enter Initials: <input type = "text" id = "initials-input"></p>
         <button type = "button" id = "initialsSubmit"></button>
     </div>
     <!--displaying highscores after game ends-->
-    <div id = "highscores" class = "hidden">
+    <div id = "highscores" style="display: none;">
         <h1>Highscores</h1>
         <div id="scores"></div>
         <button type="button" id="goBack">Go Back</button>

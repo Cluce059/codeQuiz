@@ -9,11 +9,12 @@ var scores = document.getElementById("scores");
 var questionEl = document.getElementById("question");
 var counter = document.getElementById("counter");
 var choices = document.getElementById("choices");
-var choiceA = document.getElementById("A");
-var choiceB = document.getElementById("B");
-var choiceC = document.getElementById("C");
 var scoreContainer = document.getElementById("score-container");
 var highscoresEl = document.getElementById("highscores");
+var choiceA = document.getElementById("btnA");
+var choiceB = document.getElementById("btnB");
+var choiceC = document.getElementById("btnC");
+var answerCheck = document.getElementById("answerCheck");
 // quiz time limit in seconds initialized to 60
 var count = 60;
 var score = 0;
@@ -39,8 +40,13 @@ var questions = [
     },
     {
         question:"How can you select a DOM element, or any element, using javascript?",
-        choiceA: ["getElementByID method", "getItemByClass method", "select it with your cursor method"],
+        choices: ["getElementByID method", "getItemByClass method", "select it with your cursor method"],
         correct: "getElementByID methods"
+    },
+    {
+        question: "Why?",
+        choices: ["Why not?", "How", "Whoo?"],
+        correct: "Why not?"
     }
 ];
 
@@ -66,12 +72,6 @@ function stopTimer(){
     clearInterval(timerInterval);
 };
 
-//function to display first question
-function questionRender(index){ 
-    //console.log(questions[0].question);
-    nextQuestion(index);
-};
-
 //next question to handle when timer stops
 function nextQuestion(){
     questionEl.textContent = questions[questionIndex].question;
@@ -79,32 +79,12 @@ function nextQuestion(){
     choiceB.textContent = questions[questionIndex].choices[1];
     choiceC.textContent = questions[questionIndex].choices[2];
 };
-    //console.log(questionIndex);
-    // if(questionIndex < questions.length){
-    //     questionRender(questionIndex);
-    //     questionIndex ++;
-    // }
-    // else{
-    //     //stopTimer();
-    //     if((count - timeElapsed) > 0){
-    //         //set score = current time
-    //         score += (count -timeElapsed);
-    //         console.log("use score of correct" + score);
-    //         return 0;
-    //     }
-            //get rid of quiz bc it has ended
-            //scoreRender();
-            //display(scoreInput);
-    //        timer.textContent = 0;
-    //}
 
 //start quiz function
 function startQuiz(event){
     event.preventDefault;
-    startPageEl.classList.remove("display");
-    startPageEl.classList.add("hidden");
-    quizContainerEl.classList.remove("hidden");
-    quizContainerEl.classList.add("display");
+    hide(startPageEl);
+    display(quizContainerEl);
     //hardcoded in the 0 to start at first question every time
     nextQuestion();
     //timeStart();
@@ -155,15 +135,6 @@ function endPage(finalScore){
     finalPage.innerHTML = ("<h1 class ='done-container'>" +"All Done!" + "</h1>" + "<p>"
      + "Enter your username!" + "</p>");
     finalPage.innerHTML = ("<input type = 'text' name = 'username-input' class = 'text-input' placeholder='Enter a username:'/>");
-    //store usernmae in a variable 
-    ///var usernameInput = document.querySelector("input[name='username-input']").value.trim; 
-    //finalPage.innerHTML = ("<button class = 'btn save-btn'>" + "save" + "</button>");
-    //make save button
-    // var saveButtonEl = document.createElement("button");
-    // saveButtonEl.textContent ="Save";
-    // saveButtonEl.className = "btn save-btn";
-    //save score to localstorage
-    //saveButtonEl.addEventListener("click", saveScore(finalScore, usernameInput));
 };
 
 //function to display high scores
@@ -181,13 +152,25 @@ function scoreRender(){
 
 //function to check answer and move onto next question
 function checkAnswer(choiceIndex){
-    console.log(choiceIndex);
-    console.log("at question number" + questionIndex);
-    //console.log(target);
-    var correctAnswer = questions[questionIndex].correct;
-    //console.log(questions[])
+    if(questions[questionIndex].choices[choiceIndex] === questions[questionIndex].correct){
+        answerCheck.textContent = "Correct!";
+    }
+    else{
+        answerCheck.textContent = "Wrong!";
+    }
     questionIndex ++;
-    nextQuestion();
+    if(questionIndex < questions.length){
+        nextQuestion();
+    }
+    else{
+        gameOver();
+    }
+};
+
+//function to hide quiz content when game ends
+function gameOver(){
+    hide(quizContainerEl);
+    console.log("end");
 };
 
 //check answer using the index of target
@@ -206,13 +189,9 @@ function checkC() {
 //choices.addEventListener("click", answerHandler);
 //event listener for start button, calling startquiz when clicked
 startPageEl.addEventListener("click", startQuiz);
-
 choiceA.addEventListener("click", checkA);
 choiceB.addEventListener("click", checkB);
 choiceC.addEventListener("click", checkC);
-
-
-
 
 //button to view all high scores
 viewScores.addEventListener("click", function(){
@@ -237,8 +216,7 @@ initialsSubmit.addEventListener("click", function(){
         scoreRender();
         reset();
     }
-
-})
+});
 //need these functions to handle the el appearances bc its too much to handle per function 
 //hides element
 function hide(element) {
