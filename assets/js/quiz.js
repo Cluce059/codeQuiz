@@ -8,6 +8,7 @@ var initialsInputEl = document.getElementById("initials-input");
 var scores = document.getElementById("scores");
 var questionEl = document.getElementById("question");
 var counter = document.getElementById("counter");
+var choices = document.getElementById("choices");
 var choiceA = document.getElementById("A");
 var choiceB = document.getElementById("B");
 var choiceC = document.getElementById("C");
@@ -18,7 +19,6 @@ var count = 60;
 var score = 0;
 //create an empty arr to hold the highscores that have to be stringified to get in localstorage anyway
 var highscores = [];
-//need to loop and increment questionindex and call renderQuestion
 var questionIndex = 0;
 var timerInterval;
 var timeElapsed = 0;
@@ -28,24 +28,19 @@ var questions = [
     //each el will be an obj of itself with a question, img, and 3 choices
     {
         question: "What does HTML stand for?",
-        choiceA: "Have Too Many Loofas",
-        choiceB: "Hard To Manage Loofas",
-        choiceC: "Hyper Text Markup Language",
-        correct: "C"
+        choices: ["Have Too Many Loofas", "Hard To Manage Loofas", 
+                 "Hyper Text Markup Language", "Hyper Text Markup Language"],
+        correct: "Hyper Text Markup Language"
     },
     {
         question: "What do you use to enclose array content?",
-        choiceA: "{}",
-        choiceB: "()",
-        choiceC: "[]",
-        correct: "C"
+        choices: ["{}", "()", "[]"],
+        correct: "[]"
     },
     {
-        question: "How can you select a DOM element, or any element, using javascript?",
-        choiceA: "getElementByID method",
-        choiceB: "getItemByClass method",
-        choiceC: "select it with your cursor method",
-        correct: "A"
+        question:"How can you select a DOM element, or any element, using javascript?",
+        choiceA: ["getElementByID method", "getItemByClass method", "select it with your cursor method"],
+        correct: "getElementByID methods"
     }
 ];
 
@@ -60,7 +55,8 @@ function timeStart(){
         timer.textContent = count - timeElapsed;
         if(timeElapsed >= count){
             questionIndex = questions.length;
-            nextQuestion();
+            //nextQuestion();
+
         }
     }, 1000);
 };
@@ -69,60 +65,38 @@ function timeStart(){
 function stopTimer(){
     clearInterval(timerInterval);
 };
-//function to display a question
-function questionRender(){
-    questionEl.textContent = questions[0].question;
+
+//function to display first question
+function questionRender(index){ 
+    //console.log(questions[0].question);
+    nextQuestion(index);
 };
 
 //next question to handle when timer stops
 function nextQuestion(){
-    questionIndex ++;
-    if(questionIndex < questions.length){
-        questionRender();
-    }
-    else{
-        stopTimer();
-        if((count - timeElapsed) > 0){
-            //set score = current time
-            score += (count -timeElapsed);
-            console.log("use score of correct" + score);
-        }
+    questionEl.textContent = questions[questionIndex].question;
+    choiceA.textContent = questions[questionIndex].choices[0];
+    choiceB.textContent = questions[questionIndex].choices[1];
+    choiceC.textContent = questions[questionIndex].choices[2];
+};
+    //console.log(questionIndex);
+    // if(questionIndex < questions.length){
+    //     questionRender(questionIndex);
+    //     questionIndex ++;
+    // }
+    // else{
+    //     //stopTimer();
+    //     if((count - timeElapsed) > 0){
+    //         //set score = current time
+    //         score += (count -timeElapsed);
+    //         console.log("use score of correct" + score);
+    //         return 0;
+    //     }
             //get rid of quiz bc it has ended
-            scoreRender();
-            display(scoreInput);
-            timer.textContent = 0;
-    }
-};
-
-//checkanswer function that takes user's input from event listeners
-function answerHandler (event){
-    event.preventDefault();
-    //if user picks corrrect choice
-    var targetChoice = event.target.id;
-    //if correct move onto next question
-    if(targetChoice === questions[questionIndex].correct){
-        displayMessage("Correct"); 
-    }
-    else{
-        displayMessage("Incorrect");
-        //if incorrect, minus 10 sex 4 u ;P
-        count -= 10;
-        //console.log(count);
-        //timer.innerHTML = count;
-    }
-};
-
-    //check if there are more questions before proceeding
-    if(questionIndex < lastQuestionIndex){
-        questionIndex ++;
-        questionRender();
-    }
-    //if was the last question bring up the score
-    else{
-        stopTimer();
-        scoreRender();
-    }
-
+            //scoreRender();
+            //display(scoreInput);
+    //        timer.textContent = 0;
+    //}
 
 //start quiz function
 function startQuiz(event){
@@ -131,9 +105,9 @@ function startQuiz(event){
     startPageEl.classList.add("hidden");
     quizContainerEl.classList.remove("hidden");
     quizContainerEl.classList.add("display");
-    //pull up the first question
-    questionRender();
-    timeStart();
+    //hardcoded in the 0 to start at first question every time
+    nextQuestion();
+    //timeStart();
 };
 
 //function to reset the game if user choses to play again
@@ -204,11 +178,41 @@ function scoreRender(){
     highscores.appendChild(playerScore);
     }
 };
+
+//function to check answer and move onto next question
+function checkAnswer(choiceIndex){
+    console.log(choiceIndex);
+    console.log("at question number" + questionIndex);
+    //console.log(target);
+    var correctAnswer = questions[questionIndex].correct;
+    //console.log(questions[])
+    questionIndex ++;
+    nextQuestion();
+};
+
+//check answer using the index of target
+function checkA() { 
+    checkAnswer(0); 
+}
+function checkB() {
+     checkAnswer(1); 
+}
+function checkC() {
+     checkAnswer(2); 
+}
+
 //////////////////////event listeners/////////////////////////////
 //event listener for if user clicks an answer then call function to check it
-choices.addEventListener("click", answerHandler);
+//choices.addEventListener("click", answerHandler);
 //event listener for start button, calling startquiz when clicked
-startPageEl.addEventListener("click", startQuiz); 
+startPageEl.addEventListener("click", startQuiz);
+
+choiceA.addEventListener("click", checkA);
+choiceB.addEventListener("click", checkB);
+choiceC.addEventListener("click", checkC);
+
+
+
 
 //button to view all high scores
 viewScores.addEventListener("click", function(){
